@@ -35,38 +35,44 @@ d3.csv("dataset/SpotifyFeatures.csv", function(data) {
     svg.append("g")
         .call(d3.axisLeft(y));
 
-    var scatterplot = svg.append('g')
-        .selectAll("dot")
-        .data(subset)
-        .enter()
-        .append("circle")
-        .attr("cx", function (d) { return x(d.acousticness); } )
-        .attr("cy", function (d) { return y(d.energy); } )
+    var circle = svg.append('g')
+        .selectAll("circle")
+        .data(subset);
+
+    circle.enter().append("circle")
+        .attr("r", 2.5)
+        .merge(circle)
+        .attr("cx", function(d) { return x(d.acousticness);  })
+        .attr("cy", function(d) { return y(d.energy); })
+        .attr("id", "dataPoints")
         .attr("r", 3)
         .style("fill", "#69b3a2");
 
     function updateChart() {
         points = this.value;
         subset = data.slice(0, points)
-        console.log(subset)
-        scatterplot
-            .selectAll("dot").remove()
-            .data(subset)
-            .enter()
-            .append("circle")
-            .attr("cx", function (d) { 
-                console.log(d.acousticness)
-                return x(d.acousticness); } )
-            .attr("cy", function (d) { return y(d.energy); } )
-            .attr("r", 3)
-            .style("fill", "#69b3a2");
+
+        //Remove all current circles
+        d3.selectAll("#dataPoints").remove()
+
+        var circle = svg.append('g').selectAll("circle").data(subset);
+        
+        circle
+        .enter().append("circle")
+        .attr("r", 2.5)
+        .merge(circle)
+        .attr("cx", function(d) { return x(d.acousticness);  })
+        .attr("cy", function(d) { return y(d.energy); })
+        .attr("id", "dataPoints")
+        .attr("r", 3)
+        .style("fill", "#69b3a2");
     }
 
     d3.select("#buttonSize").on("input", updateChart )
 
     
 });
-console.log(data)
+
 
     /* Randomize array in-place using Durstenfeld shuffle algorithm */
 function shuffleArray(array) {
