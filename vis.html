@@ -1,56 +1,84 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-    <link rel="stylesheet" href="vis.css">
+  <head>
+    <link rel="stylesheet" href="vis.css" />
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script src="https://d3js.org/d3-contour.v1.min.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
-</head>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito&display=swap"
+      rel="stylesheet"
+    />
+  </head>
 
-<body>
+  <body>
     <div class="grid-container">
-        <div id="header">
-            <h1>Header</h1>
-        </div>
-        <div id="scatter-container">
-            <div id="scatter-interactive">s
-                <div id="points">
-                    <label for="numberPoints"> Select number of points</label>
-                    <br>
-                    <div class="slider">
-                        <input type="range" id="numberPoints" min=0 max=500 value=100
-                            oninput="innerValue.innerText = this.value">
-                        <p id="innerValue">100</p>
-                    </div>
-
-                </div>
-                <div id="density">
-                    <label for="isDensity"> Toggle density plot</label><br>
-                    <input type="checkbox" id="isDensity">
-                </div>
-                <div id="regression">
-                    <label for="isDensity"> Toggle regression line</label><br>
-                    <input type="checkbox" id="isRegression">
-                </div>
-                <div id="selectAxis">
-
-                </div>
-
-
+      <div id="header">
+        <h1>Header</h1>
+      </div>
+      <div id="scatter-container">
+        <div id="scatter-interactive">
+          <div id="points">
+            <label for="numberPoints"> Select number of points</label>
+            <br />
+            <div class="slider">
+              <input
+                type="range"
+                id="numberPoints"
+                min="0"
+                max="500"
+                value="100"
+                oninput="innerValue.innerText = this.value"
+              />
+              <p id="innerValue">100</p>
             </div>
-            <div id="scatterplot"></div>
+          </div>
+          <div id="density">
+            <label for="isDensity"> Toggle density plot</label><br />
+            <input type="checkbox" id="isDensity" />
+          </div>
+          <div id="regression">
+            <label for="isDensity"> Toggle regression line</label><br />
+            <input type="checkbox" id="isRegression" />
+          </div>
+          <div id="selectAxis">
+              <p>Select the x and y axis</p>
+              <div class="allAxis">
+                <p>X-axis:</p>
+                <select name="xAxis" id="selectX" value="energy">
+                    <option value="acousticness">Acousticness</option>
+                    <option value="danceability">Danceability</option>
+                    <option value="energy">Energy</option>
+                    <option value="instrumentalness">Instrumentalness</option>
+                    <option value="liveness">Liveness</option>
+                    <option value="valence">Valence</option>
+                    <option value="speechiness">Speechiness</option>
+                  </select>
+                </div>
+                <div class="allAxis">
+                  <p>Y-axis:</p>
+                  <select name="yAxis" id="selectY" value="energy" autofocus="Energy">
+                      <option value="acousticness">Acousticness</option>
+                      <option value="danceability">Danceability</option>
+                      <option value="energy">Energy</option>
+                      <option value="instrumentalness">Instrumentalness</option>
+                      <option value="liveness">Liveness</option>
+                      <option value="valence">Valence</option>
+                      <option value="speechiness">Speechiness</option>
+                    </select>
+                  </div>
 
+
+          </div>
         </div>
-        <div id="other">
-            <h1>Other area</h1>
-        </div>
+        <div id="scatterplot"></div>
+      </div>
+      <div id="other">
+        <h1>Other area</h1>
+      </div>
     </div>
 
-
     <script src="vis.js"></script>
-</body>
-
+  </body>
 </html>

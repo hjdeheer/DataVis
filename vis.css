@@ -1,121 +1,116 @@
-body{
-    font-family: 'Nunito', sans-serif;
+body {
+  font-family: "Nunito", sans-serif;
 }
 
 .axis {
-    font-family: 'Nunito', sans-serif;
+  font-family: "Nunito", sans-serif;
 }
 
-.grid-container{
-    display: grid;
-    grid-template-areas:
-    'header header'
-    'scatter other';
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 100px 500px;
+.grid-container {
+  display: grid;
+  grid-template-areas:
+    "header header"
+    "scatter other";
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 100px 500px;
 }
-
 
 div#header {
-    grid-area: header;
-    text-align: center;
-
+  grid-area: header;
+  text-align: center;
 }
 
 div#scatter-container {
-    grid-area: scatter;
-    display: grid;
-    grid-template-areas:
-    'settings display';
-    grid-template-rows: 1fr 1fr;
-    grid-template-columns: 0.6fr 1.4fr;
+  grid-area: scatter;
+  display: grid;
+  grid-template-areas: "settings display";
+  grid-template-rows: 1fr 1fr;
+  grid-template-columns: 0.6fr 1.4fr;
 }
 
-div#scatter-interactive{
-    grid-area: settings;
-    display: grid;
-    grid-template-areas:
-    'points'
-    'density'
-    'regression'
-    'selectAxis';
-    grid-template-rows: 1fr 1fr 1fr 1fr;
-    grid-template-columns: auto;
+div#scatter-interactive {
+  grid-area: settings;
+  display: grid;
+  grid-template-areas:
+    "points"
+    "density"
+    "regression"
+    "selectAxis";
+  grid-template-rows: 1fr 1fr 1fr 1fr;
+  grid-template-columns: auto;
 }
 
 div#points {
-    display: inline-block;
-    grid-area: points;
-    text-align: center;
-    border-style: dashed;
-    margin: 10px 10px 10px 10px;
+  display: inline-block;
+  grid-area: points;
+  text-align: center;
 
+  margin: 10px 10px 10px 10px;
 }
 
 #points p {
-    width: 50px;
-    margin-left: 20px;
+  width: 50px;
+  margin-left: 20px;
 }
 
-div.slider{
-    border-style: dashed;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+div.slider {
 
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-div.slider{
+div.slider {
 
-    border-style: dashed;
-    display: flex;
-    align-items: center;
-
-
+  display: flex;
+  align-items: center;
 }
-
 
 div#density {
-    grid-area: density;
-    display: flex;
-    align-items: center;
-    border-style: dotted;
-    margin: auto;
+  grid-area: density;
+  display: flex;
+  align-items: center;
+  margin: auto;
 }
 
 div#regression {
-    grid-area: regression;
-    display: flex;
-    align-items: center;
-    border-style: dotted;
-    margin: auto;
+  grid-area: regression;
+  display: flex;
+  align-items: center;
+  margin: auto;
 }
 
 #density input {
-    margin-left: 20px;
+  margin-left: 20px;
 }
 
 #regression input {
-    margin-left: 20px;
+  margin-left: 20px;
 }
 div#selectAxis {
-    border-style: dotted;
-    grid-area: selectAxis;
+  grid-area: selectAxis;
+  text-align: center;
+  margin: auto;
+  border-style: dashed;
+}
+div#selectAxis p {
+    margin: 5px 5px 5px 5px;
 }
 
-
-
-div#scatterplot{
-    grid-area: display;
-    display: grid;
+div.allAxis {
+    display: flex;
     align-items: center;
-    justify-items: center;
+    justify-content: center;
+}
+div#scatterplot {
+  grid-area: display;
+  display: grid;
+  align-items: center;
+  justify-items: center;
 }
 
 
 
 div#other {
-    grid-area: other;
+  grid-area: other;
 }
-
-
