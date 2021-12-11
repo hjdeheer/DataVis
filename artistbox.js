@@ -83,16 +83,59 @@ d3.csv("https://raw.githubusercontent.com/hjdeheer/DataVis/main/dataset/SpotifyF
     })
     .entries(artist)
 
+    // Compute quartiles, median, inter quantile range min and max for the energy value
+    sumstat_energy = d3.nest() 
+    .key(function(d) { return d.artist_name;})
+    .rollup(function(d) {
+    q1 = d3.quantile(d.map(function(g) { return g.energy;}).sort(d3.ascending),.25)
+    median = d3.quantile(d.map(function(g) { return g.energy;}).sort(d3.ascending),.5)
+    q3 = d3.quantile(d.map(function(g) { return g.energy;}).sort(d3.ascending),.75)
+    interQuantileRange = q3 - q1
+    min = q1 - 1.5 * interQuantileRange
+    max = q3 + 1.5 * interQuantileRange
+    return({q1: q1, median: median, q3: q3, interQuantileRange: interQuantileRange, min: min, max: max})
+    })
+    .entries(artist)
+
+    // Compute quartiles, median, inter quantile range min and max for the speechiness value
+    sumstat_speechiness = d3.nest() 
+    .key(function(d) { return d.artist_name;})
+    .rollup(function(d) {
+    q1 = d3.quantile(d.map(function(g) { return g.speechiness;}).sort(d3.ascending),.25)
+    median = d3.quantile(d.map(function(g) { return g.speechiness;}).sort(d3.ascending),.5)
+    q3 = d3.quantile(d.map(function(g) { return g.speechiness;}).sort(d3.ascending),.75)
+    interQuantileRange = q3 - q1
+    min = q1 - 1.5 * interQuantileRange
+    max = q3 + 1.5 * interQuantileRange
+    return({q1: q1, median: median, q3: q3, interQuantileRange: interQuantileRange, min: min, max: max})
+    })
+    .entries(artist)
+
     //combine all nests into a single nest
     sumstat.push(sumstat_dance[0]);
     sumstat.push(sumstat_live[0]);
+    sumstat.push(sumstat_energy[0]);
+    sumstat.push(sumstat_speechiness[0]);
 
-    
     //Rename the keys
     sumstat[0].key = 'Acousticness'
     sumstat[1].key = 'Danceability'
     sumstat[2].key = 'Liveness'
+    sumstat[3].key = 'Energy'
+    sumstat[4].key = "Speechiness"
   }
+
+  //Create tooltip
+  var Tooltip = d3.select("#boxplot")
+    .append("div")
+    .style("position", "fixed")
+    .style("opacity", 0)
+    .attr("class", "tooltip")
+    .style("background-color", "white")
+    .style("border", "solid")
+    .style("border-width", "2px")
+    .style("border-radius", "5px")
+    .style("padding", "5px")
 
   //initialize the boxplots
   min = -0.5;
@@ -133,7 +176,7 @@ d3.csv("https://raw.githubusercontent.com/hjdeheer/DataVis/main/dataset/SpotifyF
       .style("width", 40)
 
   //Show rectangle for the main box
-  var boxWidth = 100
+  var boxWidth = 70
   var box =  svg2
     .selectAll("boxes")
     .data(sumstat)
@@ -144,7 +187,30 @@ d3.csv("https://raw.githubusercontent.com/hjdeheer/DataVis/main/dataset/SpotifyF
         .attr("height", function(d){return(y(d.value.q1)-y(d.value.q3))})
         .attr("width", boxWidth )
         .attr("stroke", "black")
-        .style("fill", "#69b3a2")
+        .style("fill", "blue")
+        .on("mouseover", function(d) {
+          Tooltip
+            .style("opacity", 1)
+          d3.select(this)
+            .style("fill", "steelblue")
+        })
+        .on("mousemove", function(d) {
+          Tooltip
+            .html("Q1: " + d.value.q1.toFixed(3) + 
+            "<br>Median: " + d.value.median.toFixed(3) +
+            "<br>Q3: " + d.value.q3.toFixed(3) +
+            "<br>Min: " + d.value.min.toFixed(3) +
+            "<br>Max: " + d.value.max.toFixed(3))
+            .style("left", d3.mouse(document.body)[0] + 15 + "px")
+            .style("top", d3.mouse(document.body)[1] + 10 + "px")
+        })
+        .on("mouseleave", function(d) {
+          Tooltip
+            .style("opacity", 0)
+          d3.select(this)
+            .style("fill", "blue")
+        })
+        console.log(svg2.left)
 
   // Show the median
   var med = svg2
@@ -199,7 +265,6 @@ d3.csv("https://raw.githubusercontent.com/hjdeheer/DataVis/main/dataset/SpotifyF
         .style("width", 40)
 
     //Update rectangle for the main box
-    var boxWidth = 100
     box
       .data(sumstat)
       .transition()
@@ -209,7 +274,7 @@ d3.csv("https://raw.githubusercontent.com/hjdeheer/DataVis/main/dataset/SpotifyF
         .attr("height", function(d){return(y(d.value.q1)-y(d.value.q3))})
         .attr("width", boxWidth )
         .attr("stroke", "black")
-        .style("fill", "#69b3a2")
+        .style("fill", "blue")
 
     //Update the median
     med
