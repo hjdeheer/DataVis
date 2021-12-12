@@ -21,13 +21,21 @@ div#header {
 }
 
 div#scatter-container {
+  height: 630px;
+  border-radius: 20px;
+  background-color: whitesmoke;
   grid-area: scatter;
   display: grid;
-  grid-template-areas: "settings display";
-  grid-template-rows: 1fr 1fr;
-  grid-template-columns: 0.6fr 1.4fr;
+  grid-template-areas: "headerscat headerscat"
+      "settings display";
+  grid-template-rows: 0.1fr 0.9fr;
+  grid-template-columns: 0.3fr 0.7fr;
 }
 
+div#scatter-header{
+  grid-area: headerscat;
+  text-align: center;
+}
 div#scatter-interactive {
   grid-area: settings;
   display: grid;
@@ -91,7 +99,7 @@ div#selectAxis {
   grid-area: selectAxis;
   text-align: center;
   margin: auto;
-  border-style: dashed;
+
 }
 div#selectAxis p {
     margin: 5px 5px 5px 5px;
@@ -103,8 +111,10 @@ div.allAxis {
     justify-content: center;
 }
 div#scatterplot {
+  border-radius: 25px;
   grid-area: display;
   display: grid;
+  position: relative;
   align-items: center;
   justify-items: center;
 }
@@ -113,4 +123,17 @@ div#scatterplot {
 
 div#other {
   grid-area: other;
+}
+
+
+div.tooltip {
+  position: absolute;
+  text-align: center;
+  padding: .2rem;
+  background: #313639;
+  color: #f9f9f9;
+  border: 0px;
+  border-radius: 8px;
+  pointer-events: none;
+  font-size: .7rem;
 }

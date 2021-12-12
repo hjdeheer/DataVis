@@ -2,8 +2,9 @@
 <html>
   <head>
     <link rel="stylesheet" href="vis.css" />
-    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/HarryStevens/d3-regression@master/dist/d3-regression.min.js"></script>
     <script src="https://d3js.org/d3-contour.v1.min.js"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -18,6 +19,9 @@
         <h1>Header</h1>
       </div>
       <div id="scatter-container">
+        <div id="scatter-header">
+          <h3>Interactive scatterplot of spotify features to analyse correlation between features</h3>
+        </div>
         <div id="scatter-interactive">
           <div id="points">
             <label for="numberPoints"> Select number of points</label>
@@ -76,6 +80,9 @@
       </div>
       <div id="other">
         <h1>Other area</h1>
+        <div background-color: "yellow">
+          TEST
+        </div>
       </div>
     </div>
 
