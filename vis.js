@@ -14,6 +14,7 @@ var svg = d3
 //Load the csv
 d3.csv("dataset/SpotifyFeatures.csv", function (data) {
 	console.log(data);
+// d3.csv("https://raw.githubusercontent.com/hjdeheer/DataVis/main/dataset/SpotifyFeatures.csv", function (data) {
 	//Global variables
 	//On initialization, show 100 points with opacity 1 and 500 with opacity 0
 	n = 100;
