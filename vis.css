@@ -10,9 +10,10 @@ body {
   display: grid;
   grid-template-areas:
     "header header"
-    "scatter boxplot";
+    "scatter boxplot"
+    "bubbleplot bubbleplot";
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: 100px 500px;
+  grid-template-rows: 100px 630px 600px;
 }
 
 div#header {
@@ -21,7 +22,7 @@ div#header {
 }
 
 div#scatter-container {
-  height: 630px;
+
   border-radius: 20px;
   background-color: whitesmoke;
   border: 2px solid lightgray;
@@ -40,7 +41,7 @@ div.plot-header {
 }
 
 div#boxplot-container {
-  height: 630px;
+
   border-radius: 20px;
   border: 2px solid lightgray;
   background-color: whitesmoke;
