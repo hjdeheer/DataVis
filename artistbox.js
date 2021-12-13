@@ -18,33 +18,33 @@ d3.csv("dataset/SpotifyFeatures.csv", function (data) {
 //d3.csv("https://raw.githubusercontent.com/hjdeheer/DataVis/main/dataset/SpotifyFeatures.csv", function (data) {
 
     var map1 = new Map();
-    var perArtist = d3.nest()
-    .key(function(d) { return d.artist_name; })
+    var perGenre = d3.nest()
+    .key(function(d) { return d.genre; })
     .entries(data);
 
-    artist_list = []
-    for (i = 0; i < perArtist.length; i++){
-      artist_list.push(perArtist[i].key)
+    genre_list = []
+    for (i = 0; i < perGenre.length; i++){
+      genre_list.push(perGenre[i].key)
     }
-    artist = perArtist[0].values;
+    Genre = perGenre[0].values;
     sumstat = []
-    update(artist)
+    update(Genre)
 
-     // add the artists to the dropdown menu
+     // add the genres to the dropdown menu
      d3.select("#artistmenu")
      .selectAll('myOptions')
-      .data(artist_list)
+      .data(genre_list)
      .enter()
      .append('option')
      .text(function (d) { return d; }) // text showed in the menu
      .attr("value", function (d) { return d; }) // corresponding value returned
 
   // A function that updates the chart
-  function update(artist) {
+  function update(genre) {
     
     // Compute quartiles, median, inter quantile range min and max for the accousticness value
     sumstat = d3.nest() 
-    .key(function(d) { return d.artist_name;})
+    .key(function(d) { return d.genre;})
     .rollup(function(d) {
     q1 = d3.quantile(d.map(function(g) { return g.acousticness;}).sort(d3.ascending),.25)
     median = d3.quantile(d.map(function(g) { return g.acousticness;}).sort(d3.ascending),.5)
@@ -54,11 +54,11 @@ d3.csv("dataset/SpotifyFeatures.csv", function (data) {
     max = q3 + 1.5 * interQuantileRange
     return({q1: q1, median: median, q3: q3, interQuantileRange: interQuantileRange, min: min, max: max})
     })
-    .entries(artist)
+    .entries(genre)
 
     // Compute quartiles, median, inter quantile range min and max for the danceability value
     sumstat_dance = d3.nest() 
-    .key(function(d) { return d.artist_name;})
+    .key(function(d) { return d.genre;})
     .rollup(function(d) {
     q1 = d3.quantile(d.map(function(g) { return g.danceability;}).sort(d3.ascending),.25)
     median = d3.quantile(d.map(function(g) { return g.danceability;}).sort(d3.ascending),.5)
@@ -68,11 +68,11 @@ d3.csv("dataset/SpotifyFeatures.csv", function (data) {
     max = q3 + 1.5 * interQuantileRange
     return({q1: q1, median: median, q3: q3, interQuantileRange: interQuantileRange, min: min, max: max})
     })
-    .entries(artist)
+    .entries(genre)
 
     // Compute quartiles, median, inter quantile range min and max for the liveness value
     sumstat_live = d3.nest() 
-    .key(function(d) { return d.artist_name;})
+    .key(function(d) { return d.genre;})
     .rollup(function(d) {
     q1 = d3.quantile(d.map(function(g) { return g.liveness;}).sort(d3.ascending),.25)
     median = d3.quantile(d.map(function(g) { return g.liveness;}).sort(d3.ascending),.5)
@@ -82,11 +82,11 @@ d3.csv("dataset/SpotifyFeatures.csv", function (data) {
     max = q3 + 1.5 * interQuantileRange
     return({q1: q1, median: median, q3: q3, interQuantileRange: interQuantileRange, min: min, max: max})
     })
-    .entries(artist)
+    .entries(genre)
 
     // Compute quartiles, median, inter quantile range min and max for the energy value
     sumstat_energy = d3.nest() 
-    .key(function(d) { return d.artist_name;})
+    .key(function(d) { return d.genre;})
     .rollup(function(d) {
     q1 = d3.quantile(d.map(function(g) { return g.energy;}).sort(d3.ascending),.25)
     median = d3.quantile(d.map(function(g) { return g.energy;}).sort(d3.ascending),.5)
@@ -96,11 +96,11 @@ d3.csv("dataset/SpotifyFeatures.csv", function (data) {
     max = q3 + 1.5 * interQuantileRange
     return({q1: q1, median: median, q3: q3, interQuantileRange: interQuantileRange, min: min, max: max})
     })
-    .entries(artist)
+    .entries(genre)
 
     // Compute quartiles, median, inter quantile range min and max for the speechiness value
     sumstat_speechiness = d3.nest() 
-    .key(function(d) { return d.artist_name;})
+    .key(function(d) { return d.genre;})
     .rollup(function(d) {
     q1 = d3.quantile(d.map(function(g) { return g.speechiness;}).sort(d3.ascending),.25)
     median = d3.quantile(d.map(function(g) { return g.speechiness;}).sort(d3.ascending),.5)
@@ -110,7 +110,7 @@ d3.csv("dataset/SpotifyFeatures.csv", function (data) {
     max = q3 + 1.5 * interQuantileRange
     return({q1: q1, median: median, q3: q3, interQuantileRange: interQuantileRange, min: min, max: max})
     })
-    .entries(artist)
+    .entries(genre)
 
     //combine all nests into a single nest
     sumstat.push(sumstat_dance[0]);
@@ -129,13 +129,14 @@ d3.csv("dataset/SpotifyFeatures.csv", function (data) {
   //Create tooltip
   var Tooltip = d3.select("#boxplot")
     .append("div")
-    .style("position", "fixed")
-    .style("opacity", 0)
-    .style("background-color", "white")
-    .style("border", "solid")
-    .style("border-width", "2px")
-    .style("border-radius", "5px")
-    .style("padding", "5px")
+    .attr("class", "tooltip")
+    // .style("position", "fixed")
+    // .style("opacity", 0)
+    // .style("background-color", "white")
+    // .style("border", "solid")
+    // .style("border-width", "2px")
+    // .style("border-radius", "5px")
+    // .style("padding", "5px")
 
   //initialize the boxplots
   min = -0.5;
@@ -293,13 +294,13 @@ d3.csv("dataset/SpotifyFeatures.csv", function (data) {
   d3.select("#artistmenu").on("change", function(d) {
     var selectedOption = d3.select(this).property("value")
     index = 0;
-    for (i = 0; i < perArtist.length; i++){
-      if (selectedOption == perArtist[i].values[0].artist_name){
+    for (i = 0; i < perGenre.length; i++){
+      if (selectedOption == perGenre[i].values[0].genre){
         index = i;
       }
     }
-    artist = perArtist[index].values;
-    update(artist);
+    genre = perGenre[index].values;
+    update(genre);
     updateplot(svg2, sumstat);
 })
 })

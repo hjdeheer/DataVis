@@ -10,7 +10,7 @@ body {
   display: grid;
   grid-template-areas:
     "header header"
-    "scatter other";
+    "scatter boxplot";
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 100px 500px;
 }
@@ -24,18 +24,58 @@ div#scatter-container {
   height: 630px;
   border-radius: 20px;
   background-color: whitesmoke;
+  border: 2px solid lightgray;
+  margin-right: 20px;
   grid-area: scatter;
   display: grid;
   grid-template-areas: "headerscat headerscat"
-      "settings display";
+    "settings display";
   grid-template-rows: 0.1fr 0.9fr;
   grid-template-columns: 0.3fr 0.7fr;
 }
 
-div#scatter-header{
+div.plot-header {
   grid-area: headerscat;
   text-align: center;
 }
+
+div#boxplot-container {
+  height: 630px;
+  border-radius: 20px;
+  border: 2px solid lightgray;
+  background-color: whitesmoke;
+  grid-area: boxplot;
+  display: grid;
+  grid-template-areas: "headerbox headerbox"
+    "settingsbox displaybox";
+  grid-template-rows: 0.1fr 0.9fr;
+  grid-template-columns: 0.2fr 0.8fr;
+}
+
+div#boxplot-header {
+  grid-area: headerbox;
+  text-align: center;
+}
+
+div#boxplot-settings {
+  grid-area: settingsbox;
+  margin-left: 15px;
+
+}
+
+div#perartist {
+  grid-area: displaybox;
+
+}
+
+
+
+
+
+
+
+
+
 div#scatter-interactive {
   grid-area: settings;
   display: grid;
@@ -95,21 +135,27 @@ div#regression {
 #regression input {
   margin-left: 20px;
 }
+
 div#selectAxis {
   grid-area: selectAxis;
   text-align: center;
   margin: auto;
 
 }
+
 div#selectAxis p {
-    margin: 5px 5px 5px 5px;
+  margin: 5px 5px 5px 5px;
 }
 
+
+
 div.allAxis {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
 }
+
 div#scatterplot {
   border-radius: 25px;
   grid-area: display;
@@ -122,7 +168,12 @@ div#scatterplot {
 
 
 div#boxplot {
-  grid-area: other;
+  border-radius: 25px;
+  grid-area: display;
+  display: grid;
+  position: relative;
+  align-items: center;
+  justify-items: center;
 }
 
 
@@ -136,4 +187,8 @@ div.tooltip {
   border-radius: 8px;
   pointer-events: none;
   font-size: .7rem;
+}
+
+div#selectGenre {
+  text-align: center;
 }

@@ -11,6 +11,18 @@ var svg = d3
 	.append("g")
 	.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+
+	
+// append the svg object to the body of the page
+var svg2 = d3.select("#boxplot")
+.append("svg")
+  .attr("width", width + margin.left + margin.right)
+  .attr("height", height + margin.top + margin.bottom)
+.append("g")
+  .attr("transform",
+		"translate(" + margin.left + "," + margin.top + ")");
+
+
 //Load the csv
 d3.csv("dataset/SpotifyFeatures.csv", function (data) {
 	console.log(data);
@@ -35,7 +47,8 @@ d3.csv("dataset/SpotifyFeatures.csv", function (data) {
 		.domain([0, 0])
 		.range([margin.left, width - margin.right]);
 	svg.append("g")
-		.attr("class", "myXaxis")
+		.attr("id", "myXaxis")
+		.attr("class", "axis")
 		.attr("transform", "translate(0," + height + ")")
 		.call(d3.axisBottom(x))
 		.attr("opacity", "0");
@@ -112,7 +125,7 @@ d3.csv("dataset/SpotifyFeatures.csv", function (data) {
 
 	//X axis transition
 	x.domain([0, 1]);
-	svg.select(".myXaxis")
+	svg.select("#myXaxis")
 		.transition()
 		.duration(750)
 		.attr("opacity", "1")
@@ -143,6 +156,7 @@ d3.csv("dataset/SpotifyFeatures.csv", function (data) {
 	svg.append("text")
 		.attr("id", "xAxisText")
 		.attr("text-anchor", "end")
+		.attr("class", "axis")
 		.attr("x", width - margin.right)
 		.attr("y", height + 0.9 * margin.top)
 		.text(xAxis);
@@ -151,11 +165,312 @@ d3.csv("dataset/SpotifyFeatures.csv", function (data) {
 	svg.append("text")
 		.attr("text-anchor", "end")
 		.attr("id", "yAxisText")
+		.attr("class", "axis")
 		.attr("transform", "rotate(-90)")
 		.attr("y", -margin.left + 20)
 		.attr("x", -margin.top)
 		.text(yAxis);
 
+
+	//----------------- BOXPLOT -------------------
+	var map1 = new Map();
+    var perGenre = d3.nest()
+    .key(function(d) { return d.genre; })
+    .entries(data);
+
+    genre_list = []
+    for (i = 0; i < perGenre.length; i++){
+      genre_list.push(perGenre[i].key)
+    }
+    Genre = perGenre[0].values;
+    sumstat = []
+    update(Genre)
+
+     // add the genres to the dropdown menu
+     d3.select("#artistmenu")
+     .selectAll('myOptions')
+      .data(genre_list)
+     .enter()
+     .append('option')
+     .text(function (d) { return d; }) // text showed in the menu
+     .attr("value", function (d) { return d; }) // corresponding value returned
+
+  // A function that updates the chart
+  function update(genre) {
+    
+    // Compute quartiles, median, inter quantile range min and max for the accousticness value
+    sumstat = d3.nest() 
+    .key(function(d) { return d.genre;})
+    .rollup(function(d) {
+    q1 = d3.quantile(d.map(function(g) { return g.acousticness;}).sort(d3.ascending),.25)
+    median = d3.quantile(d.map(function(g) { return g.acousticness;}).sort(d3.ascending),.5)
+    q3 = d3.quantile(d.map(function(g) { return g.acousticness;}).sort(d3.ascending),.75)
+    interQuantileRange = q3 - q1
+    min = q1 - 1.5 * interQuantileRange
+    max = q3 + 1.5 * interQuantileRange
+    return({q1: q1, median: median, q3: q3, interQuantileRange: interQuantileRange, min: min, max: max})
+    })
+    .entries(genre)
+
+    // Compute quartiles, median, inter quantile range min and max for the danceability value
+    sumstat_dance = d3.nest() 
+    .key(function(d) { return d.genre;})
+    .rollup(function(d) {
+    q1 = d3.quantile(d.map(function(g) { return g.danceability;}).sort(d3.ascending),.25)
+    median = d3.quantile(d.map(function(g) { return g.danceability;}).sort(d3.ascending),.5)
+    q3 = d3.quantile(d.map(function(g) { return g.danceability;}).sort(d3.ascending),.75)
+    interQuantileRange = q3 - q1
+    min = q1 - 1.5 * interQuantileRange
+    max = q3 + 1.5 * interQuantileRange
+    return({q1: q1, median: median, q3: q3, interQuantileRange: interQuantileRange, min: min, max: max})
+    })
+    .entries(genre)
+
+    // Compute quartiles, median, inter quantile range min and max for the liveness value
+    sumstat_live = d3.nest() 
+    .key(function(d) { return d.genre;})
+    .rollup(function(d) {
+    q1 = d3.quantile(d.map(function(g) { return g.liveness;}).sort(d3.ascending),.25)
+    median = d3.quantile(d.map(function(g) { return g.liveness;}).sort(d3.ascending),.5)
+    q3 = d3.quantile(d.map(function(g) { return g.liveness;}).sort(d3.ascending),.75)
+    interQuantileRange = q3 - q1
+    min = q1 - 1.5 * interQuantileRange
+    max = q3 + 1.5 * interQuantileRange
+    return({q1: q1, median: median, q3: q3, interQuantileRange: interQuantileRange, min: min, max: max})
+    })
+    .entries(genre)
+
+    // Compute quartiles, median, inter quantile range min and max for the energy value
+    sumstat_energy = d3.nest() 
+    .key(function(d) { return d.genre;})
+    .rollup(function(d) {
+    q1 = d3.quantile(d.map(function(g) { return g.energy;}).sort(d3.ascending),.25)
+    median = d3.quantile(d.map(function(g) { return g.energy;}).sort(d3.ascending),.5)
+    q3 = d3.quantile(d.map(function(g) { return g.energy;}).sort(d3.ascending),.75)
+    interQuantileRange = q3 - q1
+    min = q1 - 1.5 * interQuantileRange
+    max = q3 + 1.5 * interQuantileRange
+    return({q1: q1, median: median, q3: q3, interQuantileRange: interQuantileRange, min: min, max: max})
+    })
+    .entries(genre)
+
+    // Compute quartiles, median, inter quantile range min and max for the speechiness value
+    sumstat_speechiness = d3.nest() 
+    .key(function(d) { return d.genre;})
+    .rollup(function(d) {
+    q1 = d3.quantile(d.map(function(g) { return g.speechiness;}).sort(d3.ascending),.25)
+    median = d3.quantile(d.map(function(g) { return g.speechiness;}).sort(d3.ascending),.5)
+    q3 = d3.quantile(d.map(function(g) { return g.speechiness;}).sort(d3.ascending),.75)
+    interQuantileRange = q3 - q1
+    min = q1 - 1.5 * interQuantileRange
+    max = q3 + 1.5 * interQuantileRange
+    return({q1: q1, median: median, q3: q3, interQuantileRange: interQuantileRange, min: min, max: max})
+    })
+    .entries(genre)
+
+
+	    //combine all nests into a single nest
+		sumstat.push(sumstat_dance[0]);
+		sumstat.push(sumstat_live[0]);
+		sumstat.push(sumstat_energy[0]);
+		sumstat.push(sumstat_speechiness[0]);
+	
+		//Rename the keys
+		sumstat[0].key = 'Acousticness'
+		sumstat[1].key = 'Danceability'
+		sumstat[2].key = 'Liveness'
+		sumstat[3].key = 'Energy'
+		sumstat[4].key = "Speechiness"
+	  }
+	
+	  //Create tooltip
+	  var Tooltip = d3.select("#perartist")
+		.append("div")
+		.attr("class", "tooltip")
+		.style("opacity", 0)
+		// .style("position", "fixed")
+		// .style("opacity", 0)
+		// .style("background-color", "white")
+		// .style("border", "solid")
+		// .style("border-width", "2px")
+		// .style("border-radius", "5px")
+		// .style("padding", "5px")
+	
+	  //initialize the boxplots
+	  if (sumstat[0].value.min < -0.5) {
+		min = sumstat[0].value.min - 0.1;
+	  } else {
+		min = -0.5;
+	  }
+	  if (sumstat[0].value.max > 2) {
+		min = sumstat[0].value.max + 0.1;
+	  } else {
+		max = 2;
+	  }
+	
+	  var keys = []
+	  for (i = 0; i < sumstat.length; i++){
+		keys.push(sumstat[i].key);
+	  }
+	
+	  // Show the X scale
+	  var xBox = d3.scaleBand()
+		.range([ 0, width ])
+		.domain(keys)
+		.paddingInner(1)
+		.paddingOuter(.5)
+	  svg2.append("g")
+	  	.attr( "class", "axis")
+		.attr("transform", "translate(0," + height + ")")
+		.call(d3.axisBottom(xBox))
+	
+	  // Show the Y scale
+	  var yBox = d3.scaleLinear()
+		.domain([min, max])
+		.range([height, 0])
+	  vert = svg2.append("g").attr("class", "axis").call(d3.axisLeft(yBox))
+	
+	  // Show the main vertical line
+	  var vertline = svg2
+		.selectAll("vertLines")
+		.data(sumstat)
+		.enter()
+		.append("line")
+		  .attr("x1", function(d){return(xBox(d.key))})
+		  .attr("x2", function(d){return(xBox(d.key))})
+		  .attr("y1", function(d){return(yBox(d.value.min))})
+		  .attr("y2", function(d){return(yBox(d.value.max))})
+		  .attr("stroke", "black")
+		  .style("width", 40)
+	
+	  //Show rectangle for the main box
+	  var boxWidth = 70
+	  var box =  svg2
+		.selectAll("boxes")
+		.data(sumstat)
+		.enter()
+		.append("rect")
+			.attr("x", function(d){return(xBox(d.key)-boxWidth/2)})
+			.attr("y", function(d){return(yBox(d.value.q3))})
+			.attr("height", function(d){return(yBox(d.value.q1)-yBox(d.value.q3))})
+			.attr("width", boxWidth )
+			.attr("stroke", "black")
+			.style("fill", "blue")
+			.on("mouseover", function(d) {
+			  Tooltip
+				.style("opacity", 1)
+			  d3.select(this)
+				.style("fill", "steelblue")
+			})
+			.on("mousemove", function(d) {
+			  Tooltip
+				.html("Q1: " + d.value.q1.toFixed(3) + 
+				"<br>Median: " + d.value.median.toFixed(3) +
+				"<br>Q3: " + d.value.q3.toFixed(3) +
+				"<br>Min: " + d.value.min.toFixed(3) +
+				"<br>Max: " + d.value.max.toFixed(3))
+				.style("left", d3.mouse(document.body)[0] + 15 + "px")
+				.style("top", d3.mouse(document.body)[1] + 10 + "px")
+			})
+			.on("mouseleave", function(d) {
+			  Tooltip
+				.style("opacity", 0)
+			  d3.select(this)
+				.style("fill", "blue")
+			})
+			console.log(svg2.left)
+	
+	  // Show the median
+	  var med = svg2
+		.selectAll("medianLines")
+		.data(sumstat)
+		.enter()
+		.append("line")
+		  .attr("x1", function(d){return(xBox(d.key)-boxWidth/2) })
+		  .attr("x2", function(d){return(xBox(d.key)+boxWidth/2) })
+		  .attr("y1", function(d){return(yBox(d.value.median))})
+		  .attr("y2", function(d){return(yBox(d.value.median))})
+		  .attr("stroke", "black")
+		  .style("width", 80)
+	  
+	  //functions for updating the boxplots
+	  function updateplot(svg2, sumstat) {
+		
+		//update the min and max values if the new data does not fit
+		if (sumstat[0].value.min < -0.5) {
+		  min = sumstat[0].value.min - 0.1;
+		} else {
+		  min = -0.5;
+		}
+		if (sumstat[0].value.max > 2) {
+		  min = sumstat[0].value.max + 0.1;
+		} else {
+		  max = 2;
+		}
+	
+		var keys = []
+		for (i = 0; i < sumstat.length; i++){
+		  keys.push(sumstat[i].key);
+		}
+	
+		yBox
+		  .domain([min, max])
+		  .range([height, 0])
+		vert
+		  .transition().duration(1000)
+		  .call(d3.axisLeft(y));
+	
+		//Update vertical line
+		vertline
+		  .data(sumstat)
+		  .transition()
+		  .duration(1000)
+			.attr("x1", function(d){return(xBox(d.key))})
+			.attr("x2", function(d){return(xBox(d.key))})
+			.attr("y1", function(d){return(yBox(d.value.min))})
+			.attr("y2", function(d){return(yBox(d.value.max))})
+			.attr("stroke", "black")
+			.style("width", 40)
+	
+		//Update rectangle for the main box
+		box
+		  .data(sumstat)
+		  .transition()
+		  .duration(1000)
+			.attr("x", function(d){return(xBox(d.key)-boxWidth/2)})
+			.attr("y", function(d){return(yBox(d.value.q3))})
+			.attr("height", function(d){return(yBox(d.value.q1)-yBox(d.value.q3))})
+			.attr("width", boxWidth )
+			.attr("stroke", "black")
+			.style("fill", "blue")
+	
+		//Update the median
+		med
+		  .data(sumstat)
+		  .transition()
+		  .duration(1000)
+			.attr("x1", function(d){return(xBox(d.key)-boxWidth/2) })
+			.attr("x2", function(d){return(xBox(d.key)+boxWidth/2) })
+			.attr("y1", function(d){return(yBox(d.value.median))})
+			.attr("y2", function(d){return(yBox(d.value.median))})
+			.attr("stroke", "black")
+			.style("width", 80)
+	  
+	  }
+	  //When a new artist is selected from the dropdown menu, update the values of the boxplot
+	  d3.select("#artistmenu").on("change", function(d) {
+		var selectedOption = d3.select(this).property("value")
+		index = 0;
+		for (i = 0; i < perGenre.length; i++){
+		  if (selectedOption == perGenre[i].values[0].genre){
+			index = i;
+		  }
+		}
+		genre = perGenre[index].values;
+		update(genre);
+		updateplot(svg2, sumstat);
+	})
+	
 	function handleMouseOver(d, i) {
 		if (d3.select(this).attr("opacity") == 0) {
 			return;
