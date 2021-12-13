@@ -288,13 +288,6 @@ d3.csv("dataset/SpotifyFeatures.csv", function (data) {
 		.append("div")
 		.attr("class", "tooltip")
 		.style("opacity", 0)
-		// .style("position", "fixed")
-		// .style("opacity", 0)
-		// .style("background-color", "white")
-		// .style("border", "solid")
-		// .style("border-width", "2px")
-		// .style("border-radius", "5px")
-		// .style("padding", "5px")
 	
 	  //initialize the boxplots
 	  if (sumstat[0].value.min < -0.5) {
@@ -418,7 +411,7 @@ d3.csv("dataset/SpotifyFeatures.csv", function (data) {
 		  .range([height, 0])
 		vert
 		  .transition().duration(1000)
-		  .call(d3.axisLeft(y));
+		  .call(d3.axisLeft(yBox));
 	
 		//Update vertical line
 		vertline
