@@ -15,6 +15,7 @@ var svg2 = d3.select("#boxplot")
 
 // Read the data
 d3.csv("dataset/SpotifyFeatures.csv", function (data) {
+//d3.csv("https://raw.githubusercontent.com/hjdeheer/DataVis/main/dataset/SpotifyFeatures.csv", function (data) {
 
     var map1 = new Map();
     var perArtist = d3.nest()
@@ -130,7 +131,6 @@ d3.csv("dataset/SpotifyFeatures.csv", function (data) {
     .append("div")
     .style("position", "fixed")
     .style("opacity", 0)
-    .attr("class", "tooltip")
     .style("background-color", "white")
     .style("border", "solid")
     .style("border-width", "2px")
