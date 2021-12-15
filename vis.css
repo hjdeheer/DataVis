@@ -13,7 +13,7 @@ body {
     "scatter boxplot"
     "bubbleplot bubbleplot";
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: 100px 630px 600px;
+  grid-template-rows: 100px 630px 1000px;
 }
 
 div#header {
@@ -22,14 +22,14 @@ div#header {
 }
 
 div#scatter-container {
-
   border-radius: 20px;
   background-color: whitesmoke;
   border: 2px solid lightgray;
   margin-right: 20px;
   grid-area: scatter;
   display: grid;
-  grid-template-areas: "headerscat headerscat"
+  grid-template-areas:
+    "headerscat headerscat"
     "settings display";
   grid-template-rows: 0.1fr 0.9fr;
   grid-template-columns: 0.3fr 0.7fr;
@@ -41,13 +41,13 @@ div.plot-header {
 }
 
 div#boxplot-container {
-
   border-radius: 20px;
   border: 2px solid lightgray;
   background-color: whitesmoke;
   grid-area: boxplot;
   display: grid;
-  grid-template-areas: "headerbox headerbox"
+  grid-template-areas:
+    "headerbox headerbox"
     "settingsbox displaybox";
   grid-template-rows: 0.1fr 0.9fr;
   grid-template-columns: 0.2fr 0.8fr;
@@ -61,21 +61,70 @@ div#boxplot-header {
 div#boxplot-settings {
   grid-area: settingsbox;
   margin-left: 15px;
-
 }
 
 div#perartist {
   grid-area: displaybox;
-
 }
 
+div#bubbleplot-container {
+  border-radius: 20px;
+  background-color: whitesmoke;
+  border: 2px solid lightgray;
+  margin-top: 20px;
+  grid-area: bubbleplot;
+  display: grid;
+  grid-template-areas:
+    "headersbubble"
+    "settingsbubble"
+    "displaybubble";
+  grid-template-rows: 0.05fr 0.05fr 1fr;
+  grid-template-columns: auto;
+}
 
+div#bubbleplot-header {
+  grid-area: headersbubble;
+  text-align: center;
+}
 
+div#bubbleplot-settings {
+  grid-area: settingsbubble;
+  display: grid;
+  grid-template-areas: "date bubbles reset";
+  grid-template-rows: auto;
+  grid-template-columns: 1fr 1fr 1fr;
+}
 
+div#date {
+  grid-area: date;
+  margin-left: 10px;
+}
+div#bubbles-amount {
+  grid-area: bubbles;
+  display: inline-block;
+  text-align: center;
+  margin: 10px 10px 10px 10px;
+}
 
+div.slider-bubble {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
+div#reset {
+  grid-area: reset;
+  margin-right: 10px;
+}
 
-
+div#bubbleplot {
+  border-radius: 25px;
+  grid-area: displaybubble;
+  display: grid;
+  position: relative;
+  align-items: center;
+  justify-items: center;
+}
 
 div#scatter-interactive {
   grid-area: settings;
@@ -103,14 +152,12 @@ div#points {
 }
 
 div.slider {
-
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 div.slider {
-
   display: flex;
   align-items: center;
 }
@@ -141,20 +188,16 @@ div#selectAxis {
   grid-area: selectAxis;
   text-align: center;
   margin: auto;
-
 }
 
 div#selectAxis p {
   margin: 5px 5px 5px 5px;
 }
 
-
-
 div.allAxis {
   display: flex;
   align-items: center;
   justify-content: center;
-
 }
 
 div#scatterplot {
@@ -166,8 +209,6 @@ div#scatterplot {
   justify-items: center;
 }
 
-
-
 div#boxplot {
   border-radius: 25px;
   grid-area: display;
@@ -177,17 +218,16 @@ div#boxplot {
   justify-items: center;
 }
 
-
 div.tooltip {
   position: absolute;
   text-align: center;
-  padding: .2rem;
+  padding: 0.2rem;
   background: #313639;
   color: #f9f9f9;
   border: 0px;
   border-radius: 8px;
   pointer-events: none;
-  font-size: .7rem;
+  font-size: 0.7rem;
 }
 
 div#selectGenre {

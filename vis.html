@@ -1,96 +1,162 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <link rel="stylesheet" href="vis.css" />
+    <script src="https://cdn.jsdelivr.net/gh/HarryStevens/d3-regression@master/dist/d3-regression.min.js"></script>
+    <script src="https://d3js.org/d3-contour.v1.min.js"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://d3js.org/d3-array.v2.min.js"></script>
+    <script src="https://unpkg.com/d3-force-boundary@0.0.1/dist/d3-force-boundary.min.js"></script>
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"
+    ></script>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"
+    />
+  </head>
 
-<head>
-  <link rel="stylesheet" href="vis.css" />
-  <script src="https://cdn.jsdelivr.net/gh/HarryStevens/d3-regression@master/dist/d3-regression.min.js"></script>
-  <script src="https://d3js.org/d3-contour.v1.min.js"></script>
-  <script src="https://d3js.org/d3.v4.min.js"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet" />
-</head>
-
-<body>
-  <div class="grid-container">
-    <div id="header">
-      <h1>Header</h1>
-    </div>
-    <div id="scatter-container">
-      <div class="plot-header">
-        <h3>Interactive scatterplot of Spotify features to analyse correlation between features</h3>
+  <body>
+    <div class="grid-container">
+      <div id="header">
+        <h1>Header</h1>
       </div>
-      <div id="scatter-interactive">
-        <div id="points">
-          <label for="numberPoints"> Select number of points</label>
-          <br />
-          <div class="slider">
-            <input type="range" id="numberPoints" min="0" max="500" value="100"
-              oninput="innerValue.innerText = this.value" />
-            <p id="innerValue">100</p>
+      <div id="scatter-container">
+        <div class="plot-header">
+          <h3>
+            Interactive scatterplot of Spotify features to analyse correlation
+            between features
+          </h3>
+        </div>
+        <div id="scatter-interactive">
+          <div id="points">
+            <label for="numberPoints"> Select number of points</label>
+            <br />
+            <div class="slider">
+              <input
+                type="range"
+                id="numberPoints"
+                min="0"
+                max="500"
+                value="100"
+                oninput="innerValue.innerText = this.value"
+              />
+              <p id="innerValue">100</p>
+            </div>
+          </div>
+          <div id="density">
+            <label for="isDensity"> Toggle density plot</label><br />
+            <input type="checkbox" id="isDensity" />
+          </div>
+          <div id="regression">
+            <label for="isDensity"> Toggle regression line</label><br />
+            <input type="checkbox" id="isRegression" />
+          </div>
+          <div id="selectAxis">
+            <p>Select the x and y axis</p>
+            <div class="allAxis">
+              <p>X-axis:</p>
+              <select name="xAxis" id="selectX" value="energy">
+                <option value="acousticness">Acousticness</option>
+                <option value="danceability">Danceability</option>
+                <option value="energy">Energy</option>
+                <option value="instrumentalness">Instrumentalness</option>
+                <option value="liveness">Liveness</option>
+                <option value="valence">Valence</option>
+                <option value="speechiness">Speechiness</option>
+              </select>
+            </div>
+            <div class="allAxis">
+              <p>Y-axis:</p>
+              <select
+                name="yAxis"
+                id="selectY"
+                value="energy"
+                autofocus="Energy"
+              >
+                <option value="acousticness">Acousticness</option>
+                <option value="danceability">Danceability</option>
+                <option value="energy">Energy</option>
+                <option value="instrumentalness">Instrumentalness</option>
+                <option value="liveness">Liveness</option>
+                <option value="valence">Valence</option>
+                <option value="speechiness">Speechiness</option>
+              </select>
+            </div>
           </div>
         </div>
-        <div id="density">
-          <label for="isDensity"> Toggle density plot</label><br />
-          <input type="checkbox" id="isDensity" />
+        <div id="scatterplot"></div>
+      </div>
+      <div id="boxplot-container">
+        <div id="boxplot-header">
+          <h3>
+            Interactive boxplot of Spotify features given a selected music genre
+          </h3>
         </div>
-        <div id="regression">
-          <label for="isDensity"> Toggle regression line</label><br />
-          <input type="checkbox" id="isRegression" />
-        </div>
-        <div id="selectAxis">
-          <p>Select the x and y axis</p>
-          <div class="allAxis">
-            <p>X-axis:</p>
-            <select name="xAxis" id="selectX" value="energy">
-              <option value="acousticness">Acousticness</option>
-              <option value="danceability">Danceability</option>
-              <option value="energy">Energy</option>
-              <option value="instrumentalness">Instrumentalness</option>
-              <option value="liveness">Liveness</option>
-              <option value="valence">Valence</option>
-              <option value="speechiness">Speechiness</option>
-            </select>
+        <div id="boxplot-settings">
+          <div id="selectGenre">
+            <p>Select the music genre</p>
+            <div class="allAxis">
+              <select id="artistmenu"></select>
+            </div>
           </div>
-          <div class="allAxis">
-            <p>Y-axis:</p>
-            <select name="yAxis" id="selectY" value="energy" autofocus="Energy">
-              <option value="acousticness">Acousticness</option>
-              <option value="danceability">Danceability</option>
-              <option value="energy">Energy</option>
-              <option value="instrumentalness">Instrumentalness</option>
-              <option value="liveness">Liveness</option>
-              <option value="valence">Valence</option>
-              <option value="speechiness">Speechiness</option>
-            </select>
+        </div>
+        <div id="perartist">
+          <div id="boxplot"></div>
+        </div>
+      </div>
+      <div id="bubbleplot-container">
+        <div id="bubbleplot-header">
+          <h3>
+            Interactive bubbleplot of the global top 200 charts between
+            01/01/2017 - 10/30/2021
+          </h3>
+        </div>
+        <div id="bubbleplot-settings">
+          <div id="date">
+            <label for="date"> Select date: </label>
+            <input type="date" id="dateinput" required />
           </div>
-
-
+          <div id="bubble-amounts">
+            <label for="numberBubbles"> Select number of bubbles</label>
+            <br />
+            <div class="slider-bubble">
+              <input
+                type="range"
+                id="numberPoints"
+                min="0"
+                max="200"
+                value="50"
+                oninput="initValue.innerText = this.value"
+              />
+              <p id="initValue">50</p>
+            </div>
+          </div>
+          <div id="reset">
+            <button id="reset">reset</button>
+          </div>
         </div>
-      </div>
-      <div id="scatterplot"></div>
-    </div>
-    <div id="boxplot-container">
-      <div id="boxplot-header">
-        <h3>Interactive boxplot of Spotify features given a selected music genre</h3>
-      </div>
-      <div id="boxplot-settings">
-        <div id="selectGenre"> 
-          <p>Select the music genre</p>
-        <div class="allAxis">
-          <select id="artistmenu"></select>
-        </div>
-      </div>
-      </div>
-      <div id="perartist">
-        <div id="boxplot"></div>
+        <div id="bubbleplot"></div>
       </div>
     </div>
 
-  </div>
-
-  <script src="vis.js"></script>
-  <!-- <script src="artistbox.js"></script> -->
-</body>
-
+    <script src="vis.js"></script>
+    <!-- <script src="artistbox.js"></script> -->
+  </body>
 </html>
