@@ -1450,4 +1450,8 @@ function onBubbleClick(d) {
     focus.style("opacity", 0);
     focusText.style("opacity", 0);
   }
+
+  d3.select("#numberBubbles").on("input", updateBubbles);
+
+  function updateBubbles() {}
 }
