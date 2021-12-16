@@ -1081,6 +1081,18 @@ var svg3 = d3
   .attr("width", svg_bubble_width)
   .attr("height", svg_bubble_height);
 
+// Get width and height of current allocated gridbox
+var linechart_width = document.getElementById("line-chart").offsetWidth;
+var linechart_height = document.getElementById("line-chart").offsetHeight;
+
+// Make sure any other (previous charts) is deleted
+// d3.selectAll(".chart").remove();
+var svg_linechart = d3
+  .select("#line-chart")
+  .append("svg")
+  .attr("width", linechart_width)
+  .attr("height", linechart_height);
+
 /* Function to render current data selection
 	 Sets up scale, simulation, circles, texts
   */
@@ -1284,6 +1296,9 @@ d3.select("#edSheeran").on("click", () => {
 
 d3.select("#reset").on("click", () => {
   // First period is on latest day in dataset
+  document.getElementById("bubbleplot").style.zIndex = "1";
+  document.getElementById("chart-info").style.zIndex = "2";
+  document.getElementById("line-chart").style.zIndex = "3";
   document.getElementById("numberBubbles").value = 50;
   document.getElementById("initValue").innerHTML = 50;
   radio = document.getElementsByName("selection-option");
@@ -1306,132 +1321,52 @@ d3.select("#reset").on("click", () => {
   */
 function onBubbleClick(d) {
   if (d3.event.defaultPrevented) return; // click suppressed
+  document.getElementById("chart-info").style.display = "block";
+  document.getElementById("line-chart").style.display = "block";
 
-  // Make sure any other (previous charts) is deleted
-  d3.selectAll(".chart").remove();
+  button = document.getElementById("closebutton");
+  button.onclick = function () {
+    document.getElementById("bubbleplot").style.zIndex = "5";
+    var div = document.getElementById("chart-info");
+    if (div.style.display !== "none") {
+      div.style.display = "none";
+    } else {
+      div.style.display = "block";
+    }
+
+    var div = document.getElementById("line-chart");
+    if (div.style.display !== "none") {
+      div.style.display = "none";
+    } else {
+      div.style.display = "block";
+    }
+  };
+
+  document.getElementById("line-chart").style.zIndex = "3";
+  document.getElementById("chart-info").style.zIndex = "5";
+  document.getElementById("bubbleplot").style.zIndex = "1";
 
   // Have to retrieve original dataset to get the whole timeline data of the song
   songdata = dataglobal.filter((dglobal) => dglobal.title == d[1][0].title);
   // Sort new dataset by date
-  songdata.sort(function (a, b) {
-    return new Date(a.date) - new Date(b.date);
-  });
 
   songdata.forEach((song) => {
     song.date = new Date(song.date);
   });
+  songdata.sort(function (a, b) {
+    return a.date - b.date;
+  });
+  console.log(songdata);
 
-  line_chart_width = 400;
-  line_chart_height = 300;
-
-  // Create group for chart information
-  chart_info = svg3
-    .append("g")
-    .attr("class", "chart")
-    .attr(
-      "transform",
-      "translate(" +
-        (svg_bubble_width / 2 - 200) +
-        "," +
-        (svg_bubble_height / 2 - 200) +
-        ")"
-    );
-
-  chart_info
+  document.getElementById("song-input").innerText = d[1][0].title;
+  document.getElementById("artist-input").innerText = d[1][0].artist;
+  d3.select("svg_linechart").remove();
+  svg_linechart
     .append("rect")
-    .attr("width", line_chart_width)
-    .attr("height", 200)
+    .attr("width", linechart_width)
+    .attr("height", linechart_height)
     .attr("fill", "gray")
-    .attr("fill-opacity", 0.97);
-
-  var song_name = chart_info
-    .append("text")
-    .attr("y", 50)
-    .attr("x", 10)
-    .text("Song: ");
-
-  var artist_name = chart_info
-    .append("text")
-    .attr("y", 80)
-    .attr("x", 10)
-    .text("Artist: ");
-
-  var rank = chart_info
-    .append("text")
-    .attr("y", 110)
-    .attr("x", 10)
-    .text("Rank: ");
-
-  var date = chart_info
-    .append("text")
-    .attr("y", 140)
-    .attr("x", 10)
-    .text("Date: ");
-
-  var streams = chart_info
-    .append("text")
-    .attr("y", 170)
-    .attr("x", 10)
-    .text("Streams: ");
-
-  var song_name_input = chart_info
-    .append("text")
-    .attr("y", 50)
-    .attr("x", 80)
-    .text(d[1][0].title);
-
-  var artist_name_input = chart_info
-    .append("text")
-    .attr("y", 80)
-    .attr("x", 80)
-    .text(d[1][0].artist);
-
-  var streams_input = chart_info.append("text").attr("y", 170).attr("x", 80);
-
-  var rank_input = chart_info.append("text").attr("y", 110).attr("x", 80);
-
-  var date_input = chart_info.append("text").attr("y", 140).attr("x", 80);
-
-  var close_chart = chart_info
-    .append("g")
-    .attr("class", "chartclose")
-    .attr("transform", "translate(" + (line_chart_width - 55) + "," + 5 + ")");
-
-  var close_button = close_chart
-    .append("path")
-    .attr("d", "M 5,5 l 45,45 M 50,5 l -45,45")
-    .attr("stroke", "red")
-    .attr("stroke-width", 10);
-
-  var close_rect = close_chart
-    .append("rect")
-    .attr("width", 50)
-    .attr("height", 50)
-    .attr("fill", "black")
-    .attr("opacity", 0)
-    .on("click", () => d3.selectAll(".chart").remove())
-    .on("mouseover", () => close_button.attr("stroke", "white"))
-    .on("mouseout", () => close_button.attr("stroke", "red"));
-
-  // Create group for the chart
-  chart = svg3
-    .append("g")
-    .attr("class", "chart")
-    .attr(
-      "transform",
-      "translate(" +
-        (svg_bubble_width / 2 - 200) +
-        "," +
-        svg_bubble_height / 2 +
-        ")"
-    );
-
-  chart
-    .append("rect")
-    .attr("width", line_chart_width)
-    .attr("height", line_chart_height)
-    .attr("fill", "gray")
-    .attr("fill-opacity", 0.97)
+    .attr("fill-opacity", 0.9)
     .style("pointer-events", "all")
     .on("mouseover", mouseover)
     .on("mousemove", mousemove)
@@ -1440,14 +1375,14 @@ function onBubbleClick(d) {
   var x = d3
     .scaleTime()
     .domain(d3.extent(songdata, (d) => d.date))
-    .range([0, line_chart_width]);
+    .range([0, linechart_width]);
 
   var y = d3
     .scaleLinear()
     .domain([0, d3.max(songdata, (d) => +d.streams)])
-    .range([0, line_chart_height]);
+    .range([linechart_height, 0]);
 
-  chart
+  svg_linechart
     .append("path")
     .datum(songdata)
     .attr(
@@ -1460,21 +1395,21 @@ function onBubbleClick(d) {
         .y1(function (d) {
           return y(d.streams);
         })
-        .y0(line_chart_height)
+        .y0(y(0))
     )
     .attr("stroke", "black")
     .attr("stroke-width", 1.5)
     .attr("fill", "#69b3a2");
 
   // Create the circle that travels along the curve of chart
-  var focus = chart
+  var focus = svg_linechart
     .append("circle")
     .style("fill", "none")
     .attr("stroke", "black")
     .attr("r", 8.5)
     .style("opacity", 0);
 
-  var focusText = chart
+  var focusText = svg_linechart
     .append("text")
     .style("opacity", 0)
     .attr("text-anchor", "middle")
@@ -1501,15 +1436,17 @@ function onBubbleClick(d) {
     focusText
       .text("streams:" + selectedData.streams)
       .attr("x", x(selectedData.date));
-    rank_input.text(selectedData.rank);
-    date_input.text(
-      selectedData.date.getDate() +
-        "/" +
-        selectedData.date.getMonth() +
-        "/" +
-        selectedData.date.getFullYear()
+
+    document.getElementById("streams-input").innerText = Math.floor(
+      selectedData.streams
     );
-    streams_input.text(Math.floor(selectedData.streams));
+    document.getElementById("rank-input").innerText = selectedData.rank;
+    document.getElementById("date-input").innerText =
+      selectedData.date.getDate() +
+      "/" +
+      selectedData.date.getMonth() +
+      "/" +
+      selectedData.date.getFullYear();
   }
   function mouseout() {
     focus.style("opacity", 0);

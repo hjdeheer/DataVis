@@ -139,9 +139,51 @@ div#reset {
   margin-right: 10px;
 }
 
+div#bubbleplotcontainer {
+  grid-area: displaybubble;
+  display: grid;
+  position: relative;
+  grid-template-areas:
+    "one two three"
+    "four five six"
+    "seven eight nine";
+  grid-template-rows: 0.2fr 1fr 1fr;
+  grid-template-columns: 0.5fr 1fr 0.5fr;
+}
+
+div#chart-info {
+  grid-row: 1/2;
+  grid-column: 2/3;
+  display: grid;
+  position: relative;
+  background-color: gray;
+  opacity: 0.9;
+  margin-right: 32px;
+}
+
+div#line-chart {
+  grid-row: 2/4;
+  grid-column: 2/3;
+  display: grid;
+  position: relative;
+  align-items: center;
+  justify-items: center;
+}
+.left {
+  float: left;
+}
+.right {
+  float: right;
+}
+p {
+  margin: 0.3em;
+  overflow: hidden;
+}
+
 div#bubbleplot {
   border-radius: 25px;
-  grid-area: displaybubble;
+  grid-row: 1/4;
+  grid-column: 1/4;
   display: grid;
   position: relative;
   align-items: center;
