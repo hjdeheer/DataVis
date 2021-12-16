@@ -90,9 +90,9 @@ div#bubbleplot-header {
 div#bubbleplot-settings {
   grid-area: settingsbubble;
   display: grid;
-  grid-template-areas: "date bubbles reset";
-  grid-template-rows: auto;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-areas: "date amount selection reset";
+  grid-template-rows: 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
 }
 
 div#date {
@@ -100,7 +100,7 @@ div#date {
   margin-left: 10px;
 }
 div#bubbles-amount {
-  grid-area: bubbles;
+  grid-area: amount;
   display: inline-block;
   text-align: center;
   margin: 10px 10px 10px 10px;
@@ -110,6 +110,28 @@ div.slider-bubble {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+div#random {
+  grid-area: selection;
+  display: flex;
+  align-items: center;
+  margin: auto;
+}
+
+div#top {
+  grid-area: selection;
+  display: flex;
+  align-items: center;
+  margin: auto;
+}
+
+#top input {
+  margin-left: 50px;
+}
+
+#random input {
+  margin-left: 17px;
 }
 
 div#reset {

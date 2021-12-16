@@ -1016,8 +1016,9 @@ var inputDate = $("#dateinput").daterangepicker({
 inputDate.on("apply.daterangepicker", function (ev, picker) {
   start_date = picker.startDate.format("YYYY-MM-DD");
   end_date = picker.endDate.format("YYYY-MM-DD");
-  filter_date = filterData(start_date, end_date, dataglobal);
-  render(filter_date);
+  current_period = filterData(start_date, end_date, dataglobal);
+  document.getElementById("numberBubbles").max = current_period.length;
+  render(current_period);
 });
 
 // Function to filter the given dataset between the indicated start and end dates
@@ -1053,10 +1054,16 @@ function filterData(start_date, end_date, data) {
 // Load dataset and render the data to show on startup (today compared to yesterday)
 d3.csv("dataset/global_charts_modified.csv", function (data) {
   dataglobal = data;
+  console.log(dataglobal);
 
-  // Filter on latest day in dataset
-  first_filter = filterData("2021-10-29", "2021-10-30", dataglobal);
-  render(first_filter);
+  // First period is on latest day in dataset
+  current_period = filterData("2021-10-29", "2021-10-30", dataglobal);
+  n = document.getElementById("numberBubbles").value;
+  // Shuffle array to make selection random
+  shuffled = current_period.sort(() => 0.5 - Math.random());
+  subset = shuffled.slice(0, n);
+
+  render(subset);
 });
 
 // Get width and height of current allocated gridbox
@@ -1091,7 +1098,7 @@ var render = (data) => {
   var radiusScale = d3
     .scaleSqrt()
     .domain([min_percentage, max_percentage])
-    .range([20, 100]);
+    .range([20, 60]);
 
   // Forcelayout to move the bubbles and do collisions
   var simulation = d3
@@ -1119,6 +1126,18 @@ var render = (data) => {
     .append("g")
     .attr("class", "bubble");
 
+  var greencolorScale = d3
+    .scaleLinear()
+    .domain([0, 50])
+    .range(["#C5E8B7", "#04ff00"]);
+
+  var redcolorScale = d3
+    .scaleLinear()
+    .domain([-50, 0])
+    .range(["#ff0000", "#ff9696"]);
+
+  var percentage_to_bin = d3.scaleLinear().domain([-20, 20]).range([0, 1]);
+
   // Bubbles enter selection append circle to g
   bubblesEnter
     .append("circle")
@@ -1126,16 +1145,22 @@ var render = (data) => {
     .attr("r", (d) => {
       return radiusScale(Math.abs(d[d.length - 1]));
     })
+
+    // .attr("fill", (d) => {
+    //   console.log(percentage_to_bin(d[2]));
+    //   return d3.interpolateRdYlGn(percentage_to_bin(d[2]));
+    // });
+
     // Give + green color, - red color, recently added blue color
     .attr("fill", (d) => {
-      if (d[2] !== 0) {
-        if (Math.sign(d[2]) == 1) {
-          return "green";
-        } else {
-          return "red";
-        }
-      } else {
+      //   return colorScale(d[2]);
+      if (d[2] == 0) {
         return "#d2d6d2";
+      }
+      if (Math.sign(d[2]) == 1) {
+        return greencolorScale(d[2]);
+      } else {
+        return redcolorScale(d[2]);
       }
     });
 
@@ -1217,6 +1242,27 @@ var render = (data) => {
     d.fx = null;
     d.fy = null;
   }
+
+  function updateBubbles() {
+    radio = document.getElementsByName("selection-option");
+
+    // TOP gainers/losers
+    if (radio[1].checked) {
+      n = this.value;
+      shuffled = current_period.sort((a, b) => Math.abs(b[2]) - Math.abs(a[2]));
+      subset = shuffled.slice(0, n);
+      console.log(shuffled);
+    } else {
+      // RANDOM
+      n = this.value;
+      // Shuffle array to make selection random
+      shuffled = current_period.sort(() => 0.5 - Math.random());
+      subset = shuffled.slice(0, n);
+    }
+
+    render(subset);
+  }
+  d3.select("#numberBubbles").on("input", updateBubbles);
 };
 
 // Varius options to filter data based on selections. Buttons, sliders, input etc
@@ -1227,8 +1273,19 @@ d3.select("#edSheeran").on("click", () => {
 });
 
 d3.select("#reset").on("click", () => {
-  filtered_data = filterData("2017-03-03", "2017-03-04", dataglobal);
-  render(filtered_data);
+  // First period is on latest day in dataset
+  document.getElementById("numberBubbles").value = 50;
+  document.getElementById("initValue").innerHTML = 50;
+  radio = document.getElementsByName("selection-option");
+  radio[0].checked = false;
+  radio[1].checked = false;
+
+  n = document.getElementById("numberBubbles").value;
+  // Shuffle array to make selection random
+  shuffled = current_period.sort(() => 0.5 - Math.random());
+  subset = shuffled.slice(0, n);
+
+  render(subset);
 });
 
 /* Function executes when bubble is clicked
@@ -1275,7 +1332,6 @@ function onBubbleClick(d) {
     .attr("width", line_chart_width)
     .attr("height", 200)
     .attr("fill", "gray")
-    .attr("stroke", "red")
     .attr("fill-opacity", 0.97);
 
   var song_name = chart_info
@@ -1450,8 +1506,4 @@ function onBubbleClick(d) {
     focus.style("opacity", 0);
     focusText.style("opacity", 0);
   }
-
-  d3.select("#numberBubbles").on("input", updateBubbles);
-
-  function updateBubbles() {}
 }

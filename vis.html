@@ -30,6 +30,14 @@
       type="text/css"
       href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"
     />
+    <script src="https://cdn.jsdelivr.net/npm/d3-color@3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3-interpolate@3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3-scale-chromatic@3"></script>
+    <script>
+      const yellow = d3.interpolateYlGn(0); // "rgb(255, 255, 229)"
+      const yellowGreen = d3.interpolateYlGn(0.5); // "rgb(120, 197, 120)"
+      const green = d3.interpolateYlGn(1); // "rgb(0, 69, 41)"
+    </script>
   </head>
 
   <body>
@@ -136,16 +144,36 @@
           <div id="bubble-amounts">
             <label for="numberBubbles"> Select number of bubbles</label>
             <br />
-            <div class="slider-bubble">
+            <div class="slider">
               <input
                 type="range"
-                id="numberPoints"
+                id="numberBubbles"
                 min="0"
-                max="200"
+                max="218"
                 value="50"
                 oninput="initValue.innerText = this.value"
               />
               <p id="initValue">50</p>
+            </div>
+          </div>
+          <div id="select-options">
+            <div id="random">
+              <label for="isRandom"> Random</label><br />
+              <input
+                type="radio"
+                id="isRandom"
+                name="selection-option"
+                value="random"
+              />
+            </div>
+            <div id="top">
+              <label for="isTop"> Top</label><br />
+              <input
+                type="radio"
+                id="isTop"
+                name="selection-option"
+                value="top"
+              />
             </div>
           </div>
           <div id="reset">
