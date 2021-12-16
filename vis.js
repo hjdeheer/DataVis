@@ -1018,7 +1018,13 @@ inputDate.on("apply.daterangepicker", function (ev, picker) {
   end_date = picker.endDate.format("YYYY-MM-DD");
   current_period = filterData(start_date, end_date, dataglobal);
   document.getElementById("numberBubbles").max = current_period.length;
-  render(current_period);
+
+  n = document.getElementById("numberBubbles").value;
+  // Shuffle array to make selection random
+  shuffled = current_period.sort(() => 0.5 - Math.random());
+  subset = shuffled.slice(0, n);
+
+  render(subset);
 });
 
 // Function to filter the given dataset between the indicated start and end dates
@@ -1254,6 +1260,18 @@ var render = (data) => {
 
     render(subset);
   }
+  d3.select("#isRandom").on("change", () => {
+    n = document.getElementById("numberBubbles").value;
+    shuffled = current_period.sort(() => 0.5 - Math.random());
+    subset = shuffled.slice(0, n);
+    render(subset);
+  });
+  d3.select("#isTop").on("change", () => {
+    n = document.getElementById("numberBubbles").value;
+    shuffled = current_period.sort((a, b) => Math.abs(b[2]) - Math.abs(a[2]));
+    subset = shuffled.slice(0, n);
+    render(subset);
+  });
   d3.select("#numberBubbles").on("input", updateBubbles);
 };
 
