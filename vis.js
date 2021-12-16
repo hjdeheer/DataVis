@@ -1054,8 +1054,6 @@ function filterData(start_date, end_date, data) {
 // Load dataset and render the data to show on startup (today compared to yesterday)
 d3.csv("dataset/global_charts_modified.csv", function (data) {
   dataglobal = data;
-  console.log(dataglobal);
-
   // First period is on latest day in dataset
   current_period = filterData("2021-10-29", "2021-10-30", dataglobal);
   n = document.getElementById("numberBubbles").value;
@@ -1145,11 +1143,6 @@ var render = (data) => {
     .attr("r", (d) => {
       return radiusScale(Math.abs(d[d.length - 1]));
     })
-
-    // .attr("fill", (d) => {
-    //   console.log(percentage_to_bin(d[2]));
-    //   return d3.interpolateRdYlGn(percentage_to_bin(d[2]));
-    // });
 
     // Give + green color, - red color, recently added blue color
     .attr("fill", (d) => {
@@ -1251,7 +1244,6 @@ var render = (data) => {
       n = this.value;
       shuffled = current_period.sort((a, b) => Math.abs(b[2]) - Math.abs(a[2]));
       subset = shuffled.slice(0, n);
-      console.log(shuffled);
     } else {
       // RANDOM
       n = this.value;
@@ -1487,7 +1479,6 @@ function onBubbleClick(d) {
     var x0 = x.invert(d3.mouse(this)[0]);
     var i = bisect(songdata, x0, 1);
     selectedData = songdata[i];
-    // console.log(selectedData);
     focus.attr("cx", x(selectedData.date)).attr("cy", y(selectedData.streams));
     focusText
       .text("streams:" + selectedData.streams)
