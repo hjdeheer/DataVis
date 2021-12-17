@@ -146,28 +146,26 @@ div#bubbleplotcontainer {
   grid-template-areas:
     "one two three"
     "four five six"
-    "seven eight nine";
-  grid-template-rows: 0.2fr 1fr 1fr;
-  grid-template-columns: 0.5fr 1fr 0.5fr;
+    "seven eight nine"
+    "ten eleven twelve"
+    "thr frth fivt";
+  grid-template-rows: 0.2fr 0.5fr 0.8fr 0.8fr 1fr;
+  grid-template-columns: 1fr 0.5fr 1fr;
 }
 
 div#chart-info {
-  grid-row: 1/2;
+  grid-row: 2/3;
   grid-column: 2/3;
   display: grid;
   position: relative;
   background-color: gray;
   opacity: 0.9;
-  margin-right: 32px;
 }
 
 div#line-chart {
-  grid-row: 2/4;
+  grid-row: 3/5;
   grid-column: 2/3;
   display: grid;
-  position: relative;
-  align-items: center;
-  justify-items: center;
 }
 .left {
   float: left;
@@ -182,7 +180,7 @@ p {
 
 div#bubbleplot {
   border-radius: 25px;
-  grid-row: 1/4;
+  grid-row: 1/6;
   grid-column: 1/4;
   display: grid;
   position: relative;

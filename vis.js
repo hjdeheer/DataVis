@@ -1360,7 +1360,7 @@ function onBubbleClick(d) {
 
   document.getElementById("song-input").innerText = d[1][0].title;
   document.getElementById("artist-input").innerText = d[1][0].artist;
-  d3.select("svg_linechart").remove();
+  svg_linechart.selectAll("*").remove();
   svg_linechart
     .append("rect")
     .attr("width", linechart_width)
