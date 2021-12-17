@@ -35,7 +35,7 @@ d3.csv("dataset/SpotifyFeatures.csv", function (data) {
   densityIsVisible = false;
   regressionIsVisible = false;
   shuffleArray(data);
-  subset = data.slice(0, n);
+  subsett = data.slice(0, n);
   maxSubset = data.slice(0, maxPoints);
 
   // Add X axis
@@ -116,7 +116,7 @@ d3.csv("dataset/SpotifyFeatures.csv", function (data) {
     .attr("opacity", 0)
     .attr("fill", "#69b3a2");
 
-  shownCircles = allCircles.data(subset).attr("opacity", 1);
+  shownCircles = allCircles.data(subsett).attr("opacity", 1);
 
   d3.selectAll("#dataPoints")
     .on("mouseover", handleMouseOver)
@@ -749,7 +749,7 @@ d3.csv("dataset/SpotifyFeatures.csv", function (data) {
     } else {
       //Update points
       n = this.value;
-      subset = data.slice(0, n);
+      subsett = data.slice(0, n);
       switchRegression();
       shownCircles = allCircles.nodes().slice(0, n);
       opacityCircles = allCircles.nodes().slice(n, maxPoints);
@@ -912,7 +912,7 @@ d3.csv("dataset/SpotifyFeatures.csv", function (data) {
         .y((d) => selectYAxis(d))
         .domain([0, 1]);
 
-      let res = linearRegression(subset);
+      let res = linearRegression(subsett);
       console.log(res);
       let line = d3
         .line()
