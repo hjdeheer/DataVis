@@ -1,7 +1,16 @@
 body {
   font-family: "Nunito", sans-serif;
 }
+img {
+  max-width: 80%;
+  max-height: 80%;
+}
 
+div#header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .axis {
   font-family: "Nunito", sans-serif;
 }
